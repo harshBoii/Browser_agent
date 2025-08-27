@@ -1,103 +1,119 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+
+function SettingsModal({ isOpen, onClose, onSave }) {
+    const [key, setKey] = useState('');
+    const [model, setModel] = useState('gpt-4o');
+    const [baseUrl, setBaseUrl] = useState('https://api.openai.com/v1');
+
+    if (!isOpen) return null;
+
+    const handleSave = () => {
+        if (key.trim() && baseUrl.trim()) {
+            onSave({ apiKey: key, model, baseUrl });
+            onClose();
+        }
+    };
+
+    return (
+        <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1">
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">API Configuration</h5>
+                        <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
+                    </div>
+                    <div className="modal-body">
+                        <div className="mb-3">
+                            <label htmlFor="baseUrlInput" className="form-label">API Base URL</label>
+                            <input id="baseUrlInput" type="url" className="form-control" value={baseUrl} onChange={e => setBaseUrl(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="modelSelect" className="form-label">Model Name</label>
+                            <input id="modelSelect" type="text" className="form-control" placeholder="e.g., gpt-4o, llama3" value={model} onChange={e => setModel(e.target.value)} />
+                        </div>
+                         <div className="mb-3">
+                            <label htmlFor="apiKeyInput" className="form-label">API Key</label>
+                            <input id="apiKeyInput" type="password" className="form-control" placeholder="Enter your API key" value={key} onChange={(e) => setKey(e.target.value)} />
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" onClick={onClose}>Close</button>
+                        <button type="button" className="btn btn-primary" onClick={handleSave}>Save Configuration</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    const [messages, setMessages] = useState([]);
+    const [input, setInput] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [config, setConfig] = useState({ apiKey: '', model: '', baseUrl: '' });
+    const [isModalOpen, setIsModalOpen] = useState(true);
+    const messagesEndRef = useRef(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!input.trim() || isLoading) return;
+        if (!config.apiKey) { setIsModalOpen(true); return; }
+
+        const userMessage = { role: 'user', content: input };
+        setMessages(prev => [...prev, userMessage]);
+        setInput('');
+        setIsLoading(true);
+
+        try {
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ messages: [...messages, userMessage], ...config }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'API request failed');
+            setMessages(data.messages);
+        } catch (error) {
+            setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${error.message}` }]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
+    const renderMessage = (msg, index) => {
+        if (msg.role === 'tool') {
+            return <div key={index} className="chat-message tool-message"><b>Tool Result ({msg.name}):</b><br />{msg.content}</div>;
+        }
+        if (msg.tool_calls) {
+            return <div key={index} className="chat-message assistant-message"><i>Using tool: {msg.tool_calls[0].function.name}(...)</i></div>;
+        }
+        if (msg.role === 'user' || msg.role === 'assistant') {
+            return <div key={index} className={`chat-message ${msg.role}-message`}>{msg.content}</div>;
+        }
+        return null;
+    };
+
+    return (
+        <>
+            <SettingsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={setConfig} />
+            <div className="d-flex flex-column vh-100">
+                <header>
+                    <h4 className="m-0">Next.js LLM Agent</h4>
+                    <button className="btn btn-outline-light btn-sm" onClick={() => setIsModalOpen(true)}>Settings</button>
+                </header>
+                <main>{messages.map(renderMessage)}<div ref={messagesEndRef} /></main>
+                <footer className="p-3">
+                    <form onSubmit={handleSubmit}>
+                        <div className="input-group">
+                            <input type="text" className="form-control" placeholder={isLoading ? "Agent is processing..." : "Ask the agent anything..."} value={input} onChange={(e) => setInput(e.target.value)} disabled={isLoading} />
+                        </div>
+                    </form>
+                </footer>
+            </div>
+        </>
+    );
 }
