@@ -20,9 +20,9 @@ function SettingsModal({ isOpen, onClose, onSave }) {
         <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1">
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
+                    <div className='M'>
                     <div className="modal-header">
                         <h5 className="modal-title">API Configuration</h5>
-                        <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
                         <div className="mb-3">
@@ -30,17 +30,18 @@ function SettingsModal({ isOpen, onClose, onSave }) {
                             <input id="baseUrlInput" type="url" className="form-control" value={baseUrl} onChange={e => setBaseUrl(e.target.value)} />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="modelSelect" className="form-label">Model Name</label>
+                            <label htmlFor="modelSelect" className="form-label">ModelName- </label>
                             <input id="modelSelect" type="text" className="form-control" placeholder="e.g., gpt-4o, llama3" value={model} onChange={e => setModel(e.target.value)} />
                         </div>
                          <div className="mb-3">
-                            <label htmlFor="apiKeyInput" className="form-label">API Key</label>
+                            <label htmlFor="apiKeyInput" className="form-label">Enter API Key</label>
                             <input id="apiKeyInput" type="password" className="form-control" placeholder="Enter your API key" value={key} onChange={(e) => setKey(e.target.value)} />
                         </div>
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" onClick={onClose}>Close</button>
                         <button type="button" className="btn btn-primary" onClick={handleSave}>Save Configuration</button>
+                    </div>
                     </div>
                 </div>
             </div>

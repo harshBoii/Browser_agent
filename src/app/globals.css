@@ -88,8 +88,14 @@ input.form-control:focus {
   border-radius: 12px;
   border: 1px solid #444;
 }
+.M{
+    margin-left: 30%;
+    width: 50%;
+}
 
-.modal-header { border-bottom: 1px solid #444; }
-.modal-footer { border-top: 1px solid #444; }
+.modal-header { margin-left: 30%; font-size: xx-large; font-family: 'Times New Roman', Times, serif; color: rgb(238, 141, 141); }
+.modal-footer { margin-left: 30% }
+.btn-primary{margin-left: 10%;background-color: rgba(49, 214, 49, 0.754);}
+.btn-secondary{margin-left: -5%;background-color: rgba(49, 151, 214, 0.754)}
 
-.form-label { font-weight: 600; }
+.form-label { font-weight: 600; margin-right: 20vw; }
